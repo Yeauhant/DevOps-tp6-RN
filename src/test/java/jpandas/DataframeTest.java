@@ -37,4 +37,25 @@ class DataframeTest {
 		assertArrayEquals(new String[]{"Anabelle", "Gertrude", "Diana"},
 						  ((ArrayList<String>) test.get("name")).toArray());
 	}
+	
+	@Test
+	void testDisplay() {
+		Dataframe test = new Dataframe("test.csv");
+		System.out.println("Should print all 3 lines");
+		test.display();
+	}
+	
+	@Test
+	void testDisplayFirst() {
+		Dataframe test = new Dataframe("test.csv");
+		System.out.println("Should print first line");
+		test.displayFirst(1);
+	}
+	
+	@Test
+	void testDisplayLast() {
+		Dataframe test = new Dataframe("test.csv");
+		System.out.println("Should print last 2 lines");
+		test.displayLast(2);
+	}
 }
