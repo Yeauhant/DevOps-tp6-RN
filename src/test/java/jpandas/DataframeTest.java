@@ -39,6 +39,15 @@ class DataframeTest {
 	}
 	
 	@Test
+	void testConstructorCSVAmbiguousTypes() {
+		Dataframe test = new Dataframe("test_types.csv");
+		assertArrayEquals(new Double[]{5.0, 2.5, 4.5},
+						  ((ArrayList<Double>) test.get("count")).toArray());
+		assertArrayEquals(new String[]{"5", "Gertrude", "Diana"},
+						  ((ArrayList<String>) test.get("name")).toArray());
+	}
+	
+	@Test
 	void testDisplay() {
 		Dataframe test = new Dataframe("test.csv");
 		System.out.println("Should print all 3 lines");
@@ -57,5 +66,41 @@ class DataframeTest {
 		Dataframe test = new Dataframe("test.csv");
 		System.out.println("Should print last 2 lines");
 		test.displayLast(2);
+	}
+	
+	@Test
+	void testMin() throws Exception {
+		Dataframe test = new Dataframe("test_types.csv");
+		assertEquals(2.5, test.min("count"));
+		
+		assertThrows(Exception.class, () -> {
+			test.min("name");
+		});
+	}
+
+	@Test
+	void testMean() throws Exception {
+		Dataframe test = new Dataframe("test_types.csv");
+		assertEquals(4, test.mean("count"));
+		
+		assertThrows(Exception.class, () -> {
+			test.mean("name");
+		});
+	}
+	
+	@Test
+	void testMax() throws Exception {
+		Dataframe test = new Dataframe("test_types.csv");
+		assertEquals(5, test.max("count"));
+		
+		assertThrows(Exception.class, () -> {
+			test.max("name");
+		});
+	}
+	
+	@Test
+	void testCount() {
+		Dataframe test = new Dataframe("test_types.csv");
+		assertEquals(3, test.count("name"));
 	}
 }
