@@ -4,10 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("serial")
 public class Dataframe extends LinkedHashMap<String, Object> {
@@ -49,42 +47,64 @@ public class Dataframe extends LinkedHashMap<String, Object> {
 			
 			String[] labels = lines.get(0);
 			
+			for (int j = 0; j < labels.length; j++) {
+				boolean isInteger = true;
+				boolean isDouble = true;
+				for (int i = 1; i < lines.size(); i++) {
+					String word = lines.get(i)[j];
+					
+					try {
+						Integer wordI = Integer.parseInt(word);
+						// Is an Integer
+					} catch(NumberFormatException e) {
+						try {
+							Double wordD = Double.parseDouble(word);
+							// Is a Double
+							isInteger = false;
+						} catch(NumberFormatException e2) {
+							// Is a String
+							isDouble = false;
+							isInteger = false;
+							break;
+						}
+					}
+				}
+				
+				if (isInteger) {
+					this.put(labels[j], new ArrayList<Integer>());
+					types.put(labels[j], Type.INTEGER);
+				} else if (isDouble) {
+					this.put(labels[j], new ArrayList<Double>());
+					types.put(labels[j], Type.DOUBLE);
+				} else {
+					this.put(labels[j], new ArrayList<String>());
+					types.put(labels[j], Type.STRING);
+				}
+			}
+			
 			for (int i = 1; i < lines.size(); i++) {
 				String[] line = lines.get(i);
 				
 				for (int j = 0; j < labels.length; j++) {
 					String word = line[j];
 					
-					try {
+					switch (types.get(labels[j])) {
+					case INTEGER:
 						Integer wordI = Integer.parseInt(word);
 						// Is an Integer
-						if (firstTime) {
-							this.put(labels[j], new ArrayList<Integer>());
-							types.put(labels[j], Type.INTEGER);
-						}
-						
-						ArrayList<Integer> al = (ArrayList<Integer>) this.get(labels[j]);
-						al.add(wordI);
-					} catch(NumberFormatException e) {
-						try {
-							Double wordD = Double.parseDouble(word);
-							// Is a Double
-							if (firstTime) {
-								this.put(labels[j], new ArrayList<Double>());
-								types.put(labels[j], Type.DOUBLE);
-							}
-
-							ArrayList<Double> al = (ArrayList<Double>) this.get(labels[j]);
-							al.add(wordD);
-						} catch(NumberFormatException e2) {
-							// Is a String
-							if (firstTime) {
-								this.put(labels[j], new ArrayList<String>());
-								types.put(labels[j], Type.STRING);
-							}
-							ArrayList<String> al = (ArrayList<String>) this.get(labels[j]);
-							al.add(word);
-						}
+						ArrayList<Integer> alI = (ArrayList<Integer>) this.get(labels[j]);
+						alI.add(wordI);
+						break;
+					case DOUBLE:
+						Double wordD = Double.parseDouble(word);
+						// Is a Double
+						ArrayList<Double> alD = (ArrayList<Double>) this.get(labels[j]);
+						alD.add(wordD);
+						break;
+					case STRING:
+						// Is a String
+						ArrayList<String> al = (ArrayList<String>) this.get(labels[j]);
+						al.add(word);
 					}
 				}
 				firstTime = false;
