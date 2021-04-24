@@ -138,16 +138,17 @@ public class Dataframe extends LinkedHashMap<String, Object> {
 	
 	private static int maxChars(ArrayList<ArrayList<String>> disp, int column) {
 		int max = 0;
-		for (int i = 0; i < disp.get(0).size(); i++) {
-			int currLength = disp.get(i).get(column).length();
-			if (currLength > max)
-				max = currLength;
-		}
+		try {
+			for (int i = 0; i < disp.get(0).size(); i++) {
+				int currLength = disp.get(i).get(column).length();
+				if (currLength > max)
+					max = currLength;
+			}
+		} catch(Exception e) {}
 		return max;
 	}
 	
 	private void displayLabels(ArrayList<ArrayList<String>> disp) {
-
 		boolean firstTime = true;
 		for (String label : this.keySet()) {
 			if (firstTime) {
@@ -514,9 +515,46 @@ public class Dataframe extends LinkedHashMap<String, Object> {
 					result_al.add(al.get(index));
 				}
 				break;
-			}	
+			}
 		}
 		
 		return result;
+	}
+	
+	// return all rows with the column (label) equal to the value (value)
+	public Dataframe selectWhere(String label, Object value) {
+		ArrayList<Integer> selectedIndexes = new ArrayList<Integer>();
+		
+		switch (types.get(label)) {
+		case DOUBLE:
+			ArrayList<Double> alD = (ArrayList<Double>) this.get(label);
+
+			for (int index = 0; index < alD.size(); index++) {
+				if (alD.get(index) == (Double)value) {
+					selectedIndexes.add(index);
+				}
+			}
+			break;
+		case INTEGER:
+			ArrayList<Integer> alI = (ArrayList<Integer>) this.get(label);
+
+			for (int index = 0; index < alI.size(); index++) {
+				if (alI.get(index) == (Integer)value) {
+					selectedIndexes.add(index);
+				}
+			}
+			break;
+		case STRING:
+			ArrayList<String> al = (ArrayList<String>) this.get(label);
+
+			for (int index = 0; index < al.size(); index++) {
+				if (al.get(index).equals((String)value)) {
+					selectedIndexes.add(index);
+				}
+			}
+			break;
+		}
+		
+		return this.iloc(selectedIndexes.stream().mapToInt(i->i).toArray());
 	}
 }

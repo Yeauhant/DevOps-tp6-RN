@@ -122,4 +122,23 @@ class DataframeTest {
 				  ((ArrayList<String>) selected.get("name")).toArray());
 		assertEquals(null, selected.get("count"));
 	}
+	
+	@Test
+	void testLocIloc() {
+		Dataframe test = new Dataframe("test.csv");
+		Dataframe selected = test.loc("name").iloc(0);
+		assertArrayEquals(new String[]{"Anabelle"},
+				  ((ArrayList<String>) selected.get("name")).toArray());
+		assertEquals(null, selected.get("count"));
+	}
+	
+	@Test
+	void testSelectWhere() {
+		Dataframe test = new Dataframe("test_selectwhere.csv");
+		Dataframe selected = test.selectWhere("name", "test2");
+		assertArrayEquals(new Integer[]{21, 22, 23},
+				  ((ArrayList<Integer>) selected.get("count")).toArray());
+		assertArrayEquals(new String[]{"test2", "test2", "test2"},
+				  ((ArrayList<String>) selected.get("name")).toArray());
+	}
 }
