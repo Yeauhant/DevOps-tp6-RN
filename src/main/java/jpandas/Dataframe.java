@@ -324,4 +324,87 @@ public class Dataframe extends LinkedHashMap<String, Object> {
 		
 		displayPrint(disp);
 	}
+
+	public double max(String label) throws Exception {
+		switch (types.get(label)) {
+		case INTEGER:
+			ArrayList<Integer> alI = (ArrayList<Integer>) this.get(label);
+			int maxI = alI.get(0);
+			for (int i = 1; i < alI.size(); i++) {
+				if (alI.get(i) > maxI)
+					maxI = alI.get(i);
+			}
+			return (double)maxI;
+		case DOUBLE:
+			ArrayList<Double> alD = (ArrayList<Double>) this.get(label);
+			double maxD = alD.get(0);
+			for (int i = 1; i < alD.size(); i++) {
+				if (alD.get(i) > maxD)
+					maxD = alD.get(i);
+			}
+			return maxD;
+		default:
+			throw new Exception("Unimplemented for String columns");
+		}
+	}
+
+	public double min(String label) throws Exception {
+		switch (types.get(label)) {
+		case INTEGER:
+			ArrayList<Integer> alI = (ArrayList<Integer>) this.get(label);
+			int minI = alI.get(0);
+			for (int i = 1; i < alI.size(); i++) {
+				if (alI.get(i) < minI)
+					minI = alI.get(i);
+			}
+			return (double)minI;
+		case DOUBLE:
+			ArrayList<Double> alD = (ArrayList<Double>) this.get(label);
+			double minD = alD.get(0);
+			for (int i = 1; i < alD.size(); i++) {
+				if (alD.get(i) < minD)
+					minD = alD.get(i);
+			}
+			return minD;
+		default:
+			throw new Exception("Unimplemented for String columns");
+		}
+	}
+
+	public double mean(String label) throws Exception {
+		switch (types.get(label)) {
+		case INTEGER:
+			ArrayList<Integer> alI = (ArrayList<Integer>) this.get(label);
+			double meanI = alI.get(0);
+			for (int i = 1; i < alI.size(); i++) {
+				meanI += alI.get(i);
+			}
+			meanI /= alI.size();
+			return (double)meanI;
+		case DOUBLE:
+			ArrayList<Double> alD = (ArrayList<Double>) this.get(label);
+			double meanD = alD.get(0);
+			for (int i = 1; i < alD.size(); i++) {
+				meanD += alD.get(i);
+			}
+			meanD /= alD.size();
+			return meanD;
+		default:
+			throw new Exception("Unimplemented for String columns");
+		}
+	}
+
+	public int count(String label) {
+		switch (types.get(label)) {
+		case INTEGER:
+			ArrayList<Integer> alI = (ArrayList<Integer>) this.get(label);
+			return alI.size();
+		case DOUBLE:
+			ArrayList<Double> alD = (ArrayList<Double>) this.get(label);
+			return alD.size();
+		default:
+			ArrayList<String> al = (ArrayList<String>) this.get(label);
+			return al.size();
+		}
+	}
 }
