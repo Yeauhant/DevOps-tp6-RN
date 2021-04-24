@@ -103,4 +103,23 @@ class DataframeTest {
 		Dataframe test = new Dataframe("test_types.csv");
 		assertEquals(3, test.count("name"));
 	}
+	
+	@Test
+	void testIloc() {
+		Dataframe test = new Dataframe("test.csv");
+		Dataframe selected = test.iloc(new int[]{2, 1, 0}); // Should reverse the order of lines
+		assertArrayEquals(new Integer[]{4, 2, 5},
+				  ((ArrayList<Integer>) selected.get("count")).toArray());
+		assertArrayEquals(new String[]{"Diana", "Gertrude", "Anabelle"},
+				  ((ArrayList<String>) selected.get("name")).toArray());
+	}
+	
+	@Test
+	void testLoc() {
+		Dataframe test = new Dataframe("test.csv");
+		Dataframe selected = test.loc("name");
+		assertArrayEquals(new String[]{"Anabelle", "Gertrude", "Diana"},
+				  ((ArrayList<String>) selected.get("name")).toArray());
+		assertEquals(null, selected.get("count"));
+	}
 }

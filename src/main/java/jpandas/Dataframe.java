@@ -11,6 +11,28 @@ import java.util.List;
 public class Dataframe extends LinkedHashMap<String, Object> {
 	private HashMap<String, Type> types = new HashMap<String, Type>();
 	
+	private Dataframe(List<String> labels, List<Type> types_) {
+		for (int i = 0; i < labels.size(); i++) {
+			switch(types_.get(i)) {
+			case DOUBLE:
+				ArrayList<Double> alD = new ArrayList<Double>();
+				this.put(labels.get(i), alD);
+				types.put(labels.get(i), Type.DOUBLE);
+				break;
+			case INTEGER:
+				ArrayList<Integer> alI = new ArrayList<Integer>();
+				this.put(labels.get(i), alI);
+				types.put(labels.get(i), Type.INTEGER);
+				break;
+			case STRING:
+				ArrayList<String> al = new ArrayList<String>();
+				this.put(labels.get(i), al);
+				types.put(labels.get(i), Type.STRING);
+				break;
+			}
+		}
+	}
+	
 	public Dataframe(String[] labels, Object[]... columns) {
 		for (int i = 0; i < labels.length; i++) {
 			if (columns[i] instanceof Double[]) {
@@ -406,5 +428,95 @@ public class Dataframe extends LinkedHashMap<String, Object> {
 			ArrayList<String> al = (ArrayList<String>) this.get(label);
 			return al.size();
 		}
+	}
+
+	public Dataframe iloc(int index) {
+		return this.iloc(new int[]{index});
+	}
+
+	public Dataframe iloc(int[] indexes) {
+		ArrayList<String> labels = new ArrayList<String>();
+		ArrayList<Type> columnType = new ArrayList<Type>();
+
+		for (String label : this.keySet()) {
+			labels.add(label);
+			columnType.add(types.get(label));
+		}
+		
+		Dataframe result = new Dataframe(labels, columnType);
+		
+		for (String label : this.keySet()) {
+			for (int index : indexes) {
+				switch (types.get(label)) {
+				case DOUBLE:
+					ArrayList<Double> alD = (ArrayList<Double>) this.get(label);
+					ArrayList<Double> result_alD = (ArrayList<Double>) result.get(label);
+
+					result_alD.add(alD.get(index));
+					break;
+				case INTEGER:
+					ArrayList<Integer> alI = (ArrayList<Integer>) this.get(label);
+					ArrayList<Integer> result_alI = (ArrayList<Integer>) result.get(label);
+
+					result_alI.add(alI.get(index));
+					break;
+				case STRING:
+					ArrayList<String> al = (ArrayList<String>) this.get(label);
+					ArrayList<String> result_al = (ArrayList<String>) result.get(label);
+
+					result_al.add(al.get(index));
+					break;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public Dataframe loc(String label) {
+		return this.loc(new String[]{label});
+	}
+
+	public Dataframe loc(String[] labels) {
+		ArrayList<Type> columnType = new ArrayList<Type>();
+		ArrayList<String> labelsS = new ArrayList<String>();
+
+		for (String label : labels) {
+			labelsS.add(label);
+			columnType.add(types.get(label));
+		}
+		
+		Dataframe result = new Dataframe(labelsS, columnType);
+		
+		for (String label : labels) {
+			switch (types.get(label)) {
+			case DOUBLE:
+				ArrayList<Double> alD = (ArrayList<Double>) this.get(label);
+				ArrayList<Double> result_alD = (ArrayList<Double>) result.get(label);
+
+				for (int index = 0; index < alD.size(); index++) {
+					result_alD.add(alD.get(index));
+				}
+				break;
+			case INTEGER:
+				ArrayList<Integer> alI = (ArrayList<Integer>) this.get(label);
+				ArrayList<Integer> result_alI = (ArrayList<Integer>) result.get(label);
+
+				for (int index = 0; index < alI.size(); index++) {
+					result_alI.add(alI.get(index));
+				}
+				break;
+			case STRING:
+				ArrayList<String> al = (ArrayList<String>) this.get(label);
+				ArrayList<String> result_al = (ArrayList<String>) result.get(label);
+
+				for (int index = 0; index < al.size(); index++) {
+					result_al.add(al.get(index));
+				}
+				break;
+			}	
+		}
+		
+		return result;
 	}
 }
