@@ -39,6 +39,15 @@ class DataframeTest {
 	}
 	
 	@Test
+	void testConstructorCSVAmbiguousTypes() {
+		Dataframe test = new Dataframe("test_types.csv");
+		assertArrayEquals(new Double[]{5.0, 2.2, 4.0},
+						  ((ArrayList<Double>) test.get("count")).toArray());
+		assertArrayEquals(new String[]{"5", "Gertrude", "Diana"},
+						  ((ArrayList<String>) test.get("name")).toArray());
+	}
+	
+	@Test
 	void testDisplay() {
 		Dataframe test = new Dataframe("test.csv");
 		System.out.println("Should print all 3 lines");
