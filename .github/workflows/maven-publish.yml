@@ -4,7 +4,9 @@
 name: Publish with Maven
 
 on:
-  release:
+  push:
+    branches: [ main ]
+  pull_request:
     branches: [ main ]
 
 jobs:
