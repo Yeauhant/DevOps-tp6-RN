@@ -20,13 +20,16 @@ class DataframeTest {
 
 	@Test
 	void testConstructor() {
-		Dataframe test = new Dataframe(new String[]{"count", "name"},
+		Dataframe test = new Dataframe(new String[]{"count", "name", "time"},
 									   new Integer[]{5, 2, 4},
-									   new String[]{"Anabelle", "Gertrude", "Diana"});
+									   new String[]{"Anabelle", "Gertrude", "Diana"},
+									   new Double[]{3.5, 4.2, 3.3});
 		assertArrayEquals(new Integer[]{5, 2, 4},
 						  ((ArrayList<Integer>) test.get("count")).toArray());
 		assertArrayEquals(new String[]{"Anabelle", "Gertrude", "Diana"},
 						  ((ArrayList<String>) test.get("name")).toArray());
+		assertArrayEquals(new Double[]{3.5, 4.2, 3.3},
+		  		  		  ((ArrayList<Integer>) test.get("time")).toArray());
 	}
 	
 	@Test
@@ -36,6 +39,8 @@ class DataframeTest {
 						  ((ArrayList<Integer>) test.get("count")).toArray());
 		assertArrayEquals(new String[]{"Anabelle", "Gertrude", "Diana"},
 						  ((ArrayList<String>) test.get("name")).toArray());
+		assertArrayEquals(new Double[]{3.5, 4.2, 3.3},
+		  		  		  ((ArrayList<Integer>) test.get("time")).toArray());
 	}
 	
 	@Test
@@ -45,6 +50,8 @@ class DataframeTest {
 						  ((ArrayList<Double>) test.get("count")).toArray());
 		assertArrayEquals(new String[]{"5", "Gertrude", "Diana"},
 						  ((ArrayList<String>) test.get("name")).toArray());
+		assertArrayEquals(new Integer[]{5423, 4626, 4852},
+				  		  ((ArrayList<Integer>) test.get("time")).toArray());
 	}
 	
 	@Test
@@ -72,6 +79,7 @@ class DataframeTest {
 	void testMin() throws Exception {
 		Dataframe test = new Dataframe("test_types.csv");
 		assertEquals(2.5, test.min("count"));
+		assertEquals(4626, test.min("time"));
 		
 		assertThrows(Exception.class, () -> {
 			test.min("name");
@@ -82,6 +90,7 @@ class DataframeTest {
 	void testMean() throws Exception {
 		Dataframe test = new Dataframe("test_types.csv");
 		assertEquals(4, test.mean("count"));
+		assertEquals(4967, test.mean("time"));
 		
 		assertThrows(Exception.class, () -> {
 			test.mean("name");
@@ -92,6 +101,7 @@ class DataframeTest {
 	void testMax() throws Exception {
 		Dataframe test = new Dataframe("test_types.csv");
 		assertEquals(5, test.max("count"));
+		assertEquals(5423, test.max("time"));
 		
 		assertThrows(Exception.class, () -> {
 			test.max("name");
@@ -102,6 +112,8 @@ class DataframeTest {
 	void testCount() {
 		Dataframe test = new Dataframe("test_types.csv");
 		assertEquals(3, test.count("name"));
+		assertEquals(3, test.count("count"));
+		assertEquals(3, test.count("time"));
 	}
 	
 	@Test
