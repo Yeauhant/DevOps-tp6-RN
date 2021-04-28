@@ -29,7 +29,7 @@ class DataframeTest {
 		assertArrayEquals(new String[]{"Anabelle", "Gertrude", "Diana"},
 						  ((ArrayList<String>) test.get("name")).toArray());
 		assertArrayEquals(new Double[]{3.5, 4.2, 3.3},
-		  		  		  ((ArrayList<Integer>) test.get("time")).toArray());
+		  		  		  ((ArrayList<Double>) test.get("time")).toArray());
 	}
 	
 	@Test
@@ -40,7 +40,7 @@ class DataframeTest {
 		assertArrayEquals(new String[]{"Anabelle", "Gertrude", "Diana"},
 						  ((ArrayList<String>) test.get("name")).toArray());
 		assertArrayEquals(new Double[]{3.5, 4.2, 3.3},
-		  		  		  ((ArrayList<Integer>) test.get("time")).toArray());
+		  		  		  ((ArrayList<Double>) test.get("time")).toArray());
 	}
 	
 	@Test
@@ -64,8 +64,8 @@ class DataframeTest {
 	@Test
 	void testDisplayFirst() {
 		Dataframe test = new Dataframe("test.csv");
-		System.out.println("Should print first line");
-		test.displayFirst(1);
+		System.out.println("Should print first 2 lines");
+		test.displayFirst(2);
 	}
 	
 	@Test
@@ -124,6 +124,8 @@ class DataframeTest {
 				  ((ArrayList<Integer>) selected.get("count")).toArray());
 		assertArrayEquals(new String[]{"Diana", "Gertrude", "Anabelle"},
 				  ((ArrayList<String>) selected.get("name")).toArray());
+		assertArrayEquals(new Double[]{3.3, 4.2, 3.5},
+		  		  ((ArrayList<Double>) selected.get("time")).toArray());
 	}
 	
 	@Test
@@ -133,6 +135,7 @@ class DataframeTest {
 		assertArrayEquals(new String[]{"Anabelle", "Gertrude", "Diana"},
 				  ((ArrayList<String>) selected.get("name")).toArray());
 		assertEquals(null, selected.get("count"));
+		assertEquals(null, selected.get("time"));
 	}
 	
 	@Test
@@ -142,6 +145,7 @@ class DataframeTest {
 		assertArrayEquals(new String[]{"Anabelle"},
 				  ((ArrayList<String>) selected.get("name")).toArray());
 		assertEquals(null, selected.get("count"));
+		assertEquals(null, selected.get("time"));
 	}
 	
 	@Test
@@ -152,5 +156,7 @@ class DataframeTest {
 				  ((ArrayList<Integer>) selected.get("count")).toArray());
 		assertArrayEquals(new String[]{"test2", "test2", "test2"},
 				  ((ArrayList<String>) selected.get("name")).toArray());
+		assertArrayEquals(new Double[]{2.1, 2.2, 2.3},
+		  		  ((ArrayList<Double>) selected.get("time")).toArray());
 	}
 }
